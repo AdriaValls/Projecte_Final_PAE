@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <time.h>
 
-#define SIM_STEP_MS_TIME 100
+#define SIM_STEP_MS_TIME 10
 #define MAX_SIM_STEPS 1000
 
 #define INITIAL_POS_X 50

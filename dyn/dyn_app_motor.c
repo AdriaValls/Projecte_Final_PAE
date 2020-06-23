@@ -85,7 +85,7 @@ void forward(unsigned int speed){
     if(speed < 1024){
         moveWheel(RIGHT_WHEEL, LEFT , speed);
         moveWheel(LEFT_WHEEL, RIGHT, speed);
-    }3
+    }
 }
 
 void backward(unsigned int speed) {

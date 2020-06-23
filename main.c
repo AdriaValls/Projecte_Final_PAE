@@ -21,6 +21,9 @@
 uint8_t estado = Ninguno, estado_anterior = Ninguno, finalizar = 0;
 uint32_t indice;
 
+bool follow_wall; //true esquerra, false dreta
+bool got_wall = false;
+int dist_min = 2, dist_max = 10;
 /**
  * main.c
  */
@@ -67,8 +70,79 @@ int main(void) {
             break;
         }
 
-        forward(200);
-        turnRight(200);
+        int sen_center = redObsDistance(3, 0x1b);
+        int sen_left =  redObsDistance(3, 0x1a);
+        int sen_right = redObsDistance(3, 0x1c);
+
+        /** Si no hem trobat paret, busquem la paret més propera**/
+
+        if(got_wall == false){
+
+            /** busquem la paret més propera ens hi encarem **/
+            if (sen_left < sen_center && sen_left < sen_right){
+                turnLeft(100);
+            }else if (sen_right < sen_center && sen_left > sen_right){
+                turnRight(100);
+            }
+
+            /** Si la paret és suficientment propera la marquem com la que hem de sguir i  marquem que hem trobat una paret a seguir **/
+            if(sen_center < dist_max){
+                if (sen_left < sen_right){
+                    printf("------------Esquerra true----------------");
+                    follow_wall = true;
+                    got_wall = true;
+                }else if (sen_left > sen_right){
+                    printf("------------Dreta true----------------");
+                    follow_wall = false;
+                    got_wall = true;
+                }
+            }
+            /** Si no està a prop ens movem endavant **/
+            forward(150);
+
+        }else{
+            printf("------------Stop----------------");
+            //stop();
+            estado = Quit;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
