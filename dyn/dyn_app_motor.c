@@ -24,7 +24,7 @@ void endlessTurn(byte idMotor)
     dyn_write(idMotor, P_CW_ANGLE_LIMIT_L, params, 4);
 }
 
-void moveWheel(byte ID, bool rotation, unsigned int speed)
+void moveWheel(uint8_t ID, bool rotation, unsigned int speed)
 {
     uint8_t speed_H,speed_L;  /** Tenim dos registres a escriure per tant creem dos speeds **/
     speed_L = speed;
@@ -36,7 +36,7 @@ void moveWheel(byte ID, bool rotation, unsigned int speed)
         }else{
             speed_H = speed >> 8;
         }
-        byte bParameter[2]={speed_L,speed_H};  /** Ajuntem les dues velocitats i les enviem **/
+        uint8_t bParameter[2]={speed_L,speed_H};  /** Ajuntem les dues velocitats i les enviem **/
         dyn_write(ID,MOV_SPEED_L,bParameter,2);
     }
 }
@@ -84,14 +84,15 @@ void forward(unsigned int speed){
     /** Li donem la mateixa speed a les dues rodes i direccións oposades ja que els motors estan posats de forma inversa un de l'altre **/
     if(speed < 1024){
         moveWheel(RIGHT_WHEEL, LEFT , speed);
-        moveWheel(LEFT_WHEEL, RIGHT, speed);
+        moveWheel(LEFT_WHEEL, LEFT, speed);
     }
 }
 
 void backward(unsigned int speed) {
     /** El mateix pero Inverint les direccións per tal de que el robot camini cap enrere **/
     if (speed < 1024) {
-        moveWheel(RIGHT_WHEEL, LEFT, speed);
+        moveWheel(RIGHT_WHEEL, RIGHT, speed);
         moveWheel(LEFT_WHEEL, RIGHT, speed);
     }
 }
+

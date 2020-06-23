@@ -67,14 +67,21 @@ int dyn_read_byte(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *reg_read_val) 
  * @return Error code to be treated at higher levels.
  */
 int dyn_write(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *val, uint8_t len) {
-    uint8_t v = *val;
-    int error;
 
-    for (int i = 0; i < len; i++){  /** Segons la quantitat de registres (len) que volem escriure farem n iteracións per escriure tots **/
-        error = dyn_write_byte(module_id,reg_addr,v);
-        reg_addr +=1;
-        v+=1;
+    uint8_t bParam[len+1];
+    struct RxReturn response;
+
+    uint8_t bLength = len+1;
+    uint8_t bInstruction = DYN_INSTR__WRITE;
+    bParam[0] = reg_addr;
+    //Escribimos desde la segunda posición del array, la dirección está en pos[0]
+    int i;
+    for (i = 1; i < len + 1; i++){
+        bParam[i] = val[i-1];
     }
-    return error;
+
+    response = RxTxPacket(module_id, bLength, bInstruction, bParam);
+
+    return (response.tx_err < 1) | response.time_out;
 }
 
