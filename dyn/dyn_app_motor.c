@@ -20,81 +20,76 @@ static byte MOV_SPEED_H = 0x21;
 // Funció
 void endlessTurn(byte idMotor)
 {
-    byte params[4]={0,0,0,0};
+    byte params[4]={0,0,0,0};  /** Activem l'endless turn **/
     dyn_write(idMotor, P_CW_ANGLE_LIMIT_L, params, 4);
 }
 
 void moveWheel(byte ID, bool rotation, unsigned int speed)
 {
-    byte speed_H,speed_L;
+    uint8_t speed_H,speed_L;  /** Tenim dos registres a escriure per tant creem dos speeds **/
     speed_L = speed;
 
-    if(speed<1024){ // Velocidad max. 1023
+    if(speed<1024){  /** Comprovem que no es passa del maxim de velocitat**/
 
-        if(rotation){ // Rotation == 1
-            speed_H = (speed >> 8)+4;   // Mover a la derecha (CW)
+        if(rotation){                     /** Segons la rotació fem que el valor d'speed_H s'ajusti a la direcció que volem **/
+            speed_H = (speed >> 8)+4;
         }else{
-            speed_H = speed >> 8;       // Mover a la izquierda (CCW)
+            speed_H = speed >> 8;
         }
-        byte bParameter[2]={speed_L,speed_H};
+        byte bParameter[2]={speed_L,speed_H};  /** Ajuntem les dues velocitats i les enviem **/
         dyn_write(ID,MOV_SPEED_L,bParameter,2);
     }
 }
 
-void stop(void)
-{
+void stop(void){
+    /** Posem la velocitat a 0 per que no es mogui **/
     moveWheel(RIGHT_WHEEL, 0, 0);
     moveWheel(LEFT_WHEEL, 0, 0);
 }
 
 
-void turnLeft(unsigned int speed)
-{
-    // Girar a la izquierda - Mover a la derecha todas las ruedas
+void turnLeft(unsigned int speed){
+    /** Si volem que giri a l'esquerra li traiem velocitat a la roda esquerra i li donem a la dreta així gira sobre l'eix de la roda esquerra**/
     if(speed < 1024){
-        moveWheel(RIGHT_WHEEL, RIGHT, speed);
+        moveWheel(RIGHT_WHEEL, LEFT, speed);
         moveWheel(LEFT_WHEEL, RIGHT, 0);
     }
 }
 
-void turnOnItselfLeft(unsigned int speed)
-{
-    // Girar a la izquierda - Mover a la derecha todas las ruedas
+void turnOnItselfLeft(unsigned int speed){
+    /** Per fer un gir més tancat li donem la mateixa dirrecció a les dues rodes per tal de que giri sobre l'eix del robot **/
     if(speed < 1024){
         moveWheel(RIGHT_WHEEL, RIGHT, speed);
         moveWheel(LEFT_WHEEL, RIGHT, speed);
     }
 }
 
-void turnRight(unsigned int speed)
-{
-    // Girar a la derecha - Mover a la izquierda todas las ruedas
+void turnRight(unsigned int speed){
+    /** El mateix pero cap a la dreta **/
     if(speed < 1024){
         moveWheel(RIGHT_WHEEL, LEFT, 0);
-        moveWheel(LEFT_WHEEL, LEFT, speed);
+        moveWheel(LEFT_WHEEL, RIGHT, speed);
     }
 }
 
-void turnOnItselfRight(unsigned int speed)
-{
-    // Girar a la derecha - Mover a la izquierda todas las ruedas
+void turnOnItselfRight(unsigned int speed){
+    /** El mateix pero cap a la dreta **/
     if(speed < 1024){
         moveWheel(RIGHT_WHEEL, LEFT, speed);
         moveWheel(LEFT_WHEEL, LEFT, speed);
     }
 }
 
-void forward(unsigned int speed)
-{
-    // Mover hacia delante
+void forward(unsigned int speed){
+    /** Li donem la mateixa speed a les dues rodes i direccións oposades ja que els motors estan posats de forma inversa un de l'altre **/
     if(speed < 1024){
         moveWheel(RIGHT_WHEEL, LEFT , speed);
         moveWheel(LEFT_WHEEL, RIGHT, speed);
-    }
+    }3
 }
 
 void backward(unsigned int speed) {
-    // Mover hacia atr·s
+    /** El mateix pero Inverint les direccións per tal de que el robot camini cap enrere **/
     if (speed < 1024) {
         moveWheel(RIGHT_WHEEL, LEFT, speed);
         moveWheel(LEFT_WHEEL, RIGHT, speed);

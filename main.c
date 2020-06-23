@@ -67,6 +67,9 @@ int main(void) {
             break;
         }
 
+        forward(200);
+        turnRight(200);
+
 
 
 

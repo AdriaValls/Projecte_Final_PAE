@@ -13,24 +13,13 @@
 #include "dyn_frames.h"
 
 int redObsDistance(byte ID, byte position){
+
     uint8_t distance;
+    dyn_read_byte(ID, position, &distance); /** Llegim el valor del sensor i actualitzem el valor de distance **/
 
-
-
-    dyn_read_byte(ID, position, &distance);
-
-    return distance;
+    return distance; /** Retornem el valor actualitzat **/
 }
 
-int sensorRead(byte ID, byte sensor){
-    int distance;
-    byte param[1];
-    param[0] = 1;
-
-    distance = dyn_read_byte(ID, sensor, param);
-
-    return distance;
-}
 
 int getObstacleFlag(byte ID){
     byte flags;

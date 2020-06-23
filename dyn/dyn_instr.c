@@ -70,15 +70,11 @@ int dyn_write(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *val, uint8_t len) 
     uint8_t v = *val;
     int error;
 
-    for (int i = 0; i < len; i++){
+    for (int i = 0; i < len; i++){  /** Segons la quantitat de registres (len) que volem escriure farem n iteracións per escriure tots **/
         error = dyn_write_byte(module_id,reg_addr,v);
         reg_addr +=1;
         v+=1;
-        /*if(error > 0){
-            return error;
-        }*/
     }
     return error;
-    //return 255;
 }
 
