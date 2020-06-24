@@ -14,6 +14,6 @@
  *   3. Print distance information
  *   4.
  */
-#define DEBUG_LEVEL 3
+#define DEBUG_LEVEL 5
 
 #endif /* MAIN_H_ */

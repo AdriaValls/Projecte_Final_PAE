@@ -86,6 +86,8 @@ int main(void) {
                 turnLeft(100);
             }else if (sen_right < sen_center && sen_left > sen_right){
                 turnRight(100);
+            }else{
+                forward(200);
             }
 
             // Si la paret és suficientment propera la marquem com la que hem de sguir i  marquem que hem trobat una paret a seguir
@@ -101,7 +103,7 @@ int main(void) {
                 }
             }
             // Si no està a prop ens movem endavant
-            forward(150);
+
 
         }else{
             printf("--------------------------------Following wall--------------------------------------");
