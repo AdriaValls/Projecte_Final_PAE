@@ -17,13 +17,13 @@
 #include "habitacion_001.h"
 
 
-
 uint8_t estado = Ninguno, estado_anterior = Ninguno, finalizar = 0;
 uint32_t indice;
 
 bool follow_wall; //true esquerra, false dreta
 bool got_wall = false;
-int dist_min = 2, dist_max = 10, dist_seguretat = 15;
+int dist_min = 2, dist_max = 10, dist_seguretat = 12;
+int sen_center, sen_left, sen_right;
 /**
  * main.c
  */
@@ -64,18 +64,17 @@ int main(void) {
     endlessTurn(1);
     endlessTurn(2);
 
-
     while (estado != Quit) {
         if (simulator_finished) {
             break;
         }
-        int sen_center = redObsDistance(3, 0x1b);
-        int sen_left =  redObsDistance(3, 0x1a);
-        int sen_right = redObsDistance(3, 0x1c);
-
+        printf("*********************************************************************");
+        sen_center = redObsDistance(3, 0x1b);
+        sen_left =  redObsDistance(3, 0x1a);
+        sen_right = redObsDistance(3, 0x1c);
+        printf("*********************************************************************");
 
         //forward(150);
-
 
         //Si no hem trobat paret, busquem la paret més propera
 
@@ -83,39 +82,34 @@ int main(void) {
 
             //busquem la paret més propera ens hi encarem
             if (sen_left < sen_center && sen_left < sen_right){
-                turnLeft(100);
+                turnLeft(150);
             }else if (sen_right < sen_center && sen_left > sen_right){
-                turnRight(100);
+                turnRight(150);
             }
+            forward(150);
 
             // Si la paret és suficientment propera la marquem com la que hem de sguir i  marquem que hem trobat una paret a seguir
-            if(sen_center < dist_max){
+            if(sen_center <= dist_max){
+                stop();
                 if (sen_left < sen_right){
-                    printf("----------------------------Esquerra true------------------------------");
                     follow_wall = true;
                     got_wall = true;
                 }else if (sen_left > sen_right){
-                    printf("--------------------------------Dreta true--------------------------------------");
                     follow_wall = false;
                     got_wall = true;
                 }
             }
             // Si no està a prop ens movem endavant
-            forward(150);
-
-        }else{
-            printf("--------------------------------Following wall--------------------------------------");
-
+        }else if(got_wall == true){
             if(follow_wall){  //follow_wall == true --> paret esquerra
 
                 if(sen_center <= dist_max){ //girar
                     while (sen_center < dist_seguretat){
-                        turnOnItselfRight(100);
+                        printf("--------------------------------Drift--------------------------------------");
+                        turnOnItselfRight(200);
+                        printf("--------------------------------Drift--------------------------------------");
                         sen_center = redObsDistance(3, 0x1b);
                     }
-
-
-
                 }
                 else if(sen_left < dist_min){
                     turnRight(150);
@@ -123,10 +117,7 @@ int main(void) {
                 else if(sen_left > dist_max){
                     turnLeft(150);
                 }
-
                 forward(150);
-
-
             }
             else if(follow_wall == false){  //follow_wall == false --> paret dreta
 
@@ -135,9 +126,6 @@ int main(void) {
                         turnOnItselfLeft(100);
                         sen_center = redObsDistance(3, 0x1b);
                     }
-
-
-
                 }
                 else if(sen_right < dist_min){
                     turnRight(150);
@@ -145,19 +133,9 @@ int main(void) {
                 else if(sen_right > dist_max){
                     turnLeft(150);
                 }
-
                 forward(150);
-
-
-
             }
         }
-
-
-
-
-
-
 
 
 

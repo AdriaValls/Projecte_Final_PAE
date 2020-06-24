@@ -10,8 +10,8 @@
 #define P_CW_ANGLE_LIMIT_H 0x07
 #define P_CCW_ANGLE_LIMIT_L 0x08
 #define P_CCW_ANGLE_LIMIT_H 0x09
-#define LEFT 0
-#define RIGHT 1
+#define LEFT 0 //GIRA ENDAVANT LA RODA
+#define RIGHT 1 //GIRA ENRERE LA RODA
 #define RIGHT_WHEEL 2
 #define LEFT_WHEEL 1
 static byte MOV_SPEED_L = 0x20;
@@ -51,31 +51,28 @@ void stop(void){
 void turnLeft(unsigned int speed){
     /** Si volem que giri a l'esquerra li traiem velocitat a la roda esquerra i li donem a la dreta així gira sobre l'eix de la roda esquerra**/
     if(speed < 1024){
+        moveWheel(LEFT_WHEEL, LEFT, 0);
         moveWheel(RIGHT_WHEEL, LEFT, speed);
-        moveWheel(LEFT_WHEEL, RIGHT, 0);
     }
 }
-
-void turnOnItselfLeft(unsigned int speed){
-    /** Per fer un gir més tancat li donem la mateixa dirrecció a les dues rodes per tal de que giri sobre l'eix del robot **/
-    if(speed < 1024){
-        moveWheel(RIGHT_WHEEL, RIGHT, speed);
-        moveWheel(LEFT_WHEEL, RIGHT, speed);
-    }
-}
-
 void turnRight(unsigned int speed){
     /** El mateix pero cap a la dreta **/
     if(speed < 1024){
+        moveWheel(LEFT_WHEEL, LEFT, speed);
         moveWheel(RIGHT_WHEEL, LEFT, 0);
+    }
+}
+void turnOnItselfLeft(unsigned int speed){
+    /** Per fer un gir més tancat li donem la mateixa dirrecció a les dues rodes per tal de que giri sobre l'eix del robot **/
+    if(speed < 1024){
+        moveWheel(RIGHT_WHEEL, LEFT, speed);
         moveWheel(LEFT_WHEEL, RIGHT, speed);
     }
 }
-
 void turnOnItselfRight(unsigned int speed){
     /** El mateix pero cap a la dreta **/
     if(speed < 1024){
-        moveWheel(RIGHT_WHEEL, LEFT, speed);
+        moveWheel(RIGHT_WHEEL, RIGHT, speed);
         moveWheel(LEFT_WHEEL, LEFT, speed);
     }
 }
