@@ -68,27 +68,29 @@ int main(void) {
         if (simulator_finished) {
             break;
         }
-        printf("*********************************************************************");
+
         sen_center = redObsDistance(3, 0x1b);
         sen_left =  redObsDistance(3, 0x1a);
         sen_right = redObsDistance(3, 0x1c);
-        printf("*********************************************************************");
+        /** Llegim els valors dels sensors per saber les distàncies de cad un**/
 
-        //forward(150);
-
-        //Si no hem trobat paret, busquem la paret més propera
+        /** L'algorisme comença comprovant que no tenim cap paret (got_wall = false al començar ja que al principi hem de buscar una paret) **/
 
         if(got_wall == false){
 
-            //busquem la paret més propera ens hi encarem
+            /** Ja que no hem trobat cap paret n'hem de buscar una, aixó ho fem mesurant i comparant els tres sensors
+             * Busquem la distància més petita dels sensors esquerra, dreta i centre, si el valor més petit és el del centre vol dir que anem ben encaminats i per tant anem cap endavant
+             * en canvi si la distància més petita és la d'un sensor lateral, girem cap a aquella direcció per tal d'encararnos bé cap a la paret**/
             if (sen_left < sen_center && sen_left < sen_right){
                 turnLeft(150);
             }else if (sen_right < sen_center && sen_left > sen_right){
                 turnRight(150);
             }
-            forward(100);
+            forward(150);
 
-            // Si la paret és suficientment propera la marquem com la que hem de sguir i  marquem que hem trobat una paret a seguir
+            /** Ara mirem el sensor centre, si veu que està molt a prop de la paret busca quin costat està més a prop de la paret i el segueix
+             * Agafant el costat ara sabem quina paret hem de segir i per tant tenim una paret (got_wall = true)
+             * I també marquem el costat en el que està la paret amb el follow wall (true = esquerra, false=dreta)**/
             if(sen_center <= dist_max){
                 stop();
                 if (sen_left < sen_right){
@@ -99,28 +101,33 @@ int main(void) {
                     got_wall = true;
                 }
             }
-            // Si no està a prop ens movem endavant
-        }else if(got_wall == true){
-            if(follow_wall){  //follow_wall == true --> paret esquerra
 
+
+        }else if(got_wall == true){
+            /** Ara ja hem trobat una paret i per tant la podem seguir. l'algorisme està dividit en dos parts utilitzant l'if per saber a quin costat està la paret**/
+            if(follow_wall){
+
+                /** Si seguint la paret ens trobem amb un obstacle al davant el motor girarà cap al costat contrari de la paret
+                  fins que el sesor del centre ja no estigui detectant l'obstacle, així ens assegurem que hem deixat l'obstacle al mateix
+                  costat que la paret que estavem seguint, fent així que l'obstacle sigui la paret que hem de seguir**/
                 if(sen_center <= dist_max){ //girar
                     while (sen_center < dist_seguretat){
-                        printf("--------------------------------Drift--------------------------------------");
-                        turnOnItselfRight(150);
-                        printf("--------------------------------Drift--------------------------------------");
+                        turnOnItselfRight(200);
                         sen_center = redObsDistance(3, 0x1b);
                     }
                 }
+                /** Si no troba cap obstacle, comprovem que no ens estem acostant a la paret, si estem massa a prop girem cap a la dreta
+                 * i si ens allunyem massa girem cap a l'esquerra**/
                 else if(sen_left < dist_min){
                     turnRight(150);
                 }
                 else if(sen_left > dist_max){
                     turnLeft(150);
                 }
-                forward(100);
+                forward(150);
             }
-            else if(follow_wall == false){  //follow_wall == false --> paret dreta
-
+            else if(follow_wall == false){
+                /** Aquesta part és la mateixa que l'anterior pero amb els valors canviats per seguir la paret a la dreta**/
                 if(sen_center <= dist_max){
                     while (sen_center < dist_seguretat){
                         turnOnItselfLeft(100);
@@ -133,7 +140,7 @@ int main(void) {
                 else if(sen_right > dist_max){
                     turnLeft(150);
                 }
-                forward(100);
+                forward(150);
             }
         }
 
