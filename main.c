@@ -22,7 +22,7 @@ uint32_t indice;
 
 bool follow_wall; //true esquerra, false dreta
 bool got_wall = false;
-int dist_min = 2, dist_max = 10, dist_seguretat = 12;
+int dist_min = 2,dist_mid = 5, dist_max = 10, dist_seguretat = 12;
 int sen_center, sen_left, sen_right;
 /**
  * main.c
@@ -86,7 +86,7 @@ int main(void) {
             }else if (sen_right < sen_center && sen_left > sen_right){
                 turnRight(150);
             }
-            forward(150);
+            forward(100);
 
             // Si la paret és suficientment propera la marquem com la que hem de sguir i  marquem que hem trobat una paret a seguir
             if(sen_center <= dist_max){
@@ -106,7 +106,7 @@ int main(void) {
                 if(sen_center <= dist_max){ //girar
                     while (sen_center < dist_seguretat){
                         printf("--------------------------------Drift--------------------------------------");
-                        turnOnItselfRight(200);
+                        turnOnItselfRight(150);
                         printf("--------------------------------Drift--------------------------------------");
                         sen_center = redObsDistance(3, 0x1b);
                     }
@@ -117,7 +117,7 @@ int main(void) {
                 else if(sen_left > dist_max){
                     turnLeft(150);
                 }
-                forward(150);
+                forward(100);
             }
             else if(follow_wall == false){  //follow_wall == false --> paret dreta
 
@@ -133,7 +133,7 @@ int main(void) {
                 else if(sen_right > dist_max){
                     turnLeft(150);
                 }
-                forward(150);
+                forward(100);
             }
         }
 

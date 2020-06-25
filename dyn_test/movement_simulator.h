@@ -12,11 +12,11 @@
 #include <stdint.h>
 #include <time.h>
 
-#define SIM_STEP_MS_TIME 100
-#define MAX_SIM_STEPS 6000
+#define SIM_STEP_MS_TIME 10
+#define MAX_SIM_STEPS 50000
 
 #define INITIAL_POS_X 20
-#define INITIAL_POS_Y 850
+#define INITIAL_POS_Y 800
 #define INITIAL_POS_THETA M_PI_2
 
 
