@@ -112,13 +112,15 @@ int main(void) {
                   costat que la paret que estavem seguint, fent així que l'obstacle sigui la paret que hem de seguir**/
                 if(sen_center <= dist_max){ //girar
                     while (sen_center < dist_seguretat){
-                        turnOnItselfRight(200);
+                        printf("-------------------------------------------------Drift-----------------------------------");
+                        turnOnItselfRight(100);
+                        printf("-------------------------------------------------Drift-----------------------------------");
                         sen_center = redObsDistance(3, 0x1b);
                     }
                 }
                 /** Si no troba cap obstacle, comprovem que no ens estem acostant a la paret, si estem massa a prop girem cap a la dreta
                  * i si ens allunyem massa girem cap a l'esquerra**/
-                else if(sen_left < dist_min){
+                else if(sen_left <= dist_min){
                     turnRight(150);
                 }
                 else if(sen_left > dist_max){
@@ -130,11 +132,13 @@ int main(void) {
                 /** Aquesta part és la mateixa que l'anterior pero amb els valors canviats per seguir la paret a la dreta**/
                 if(sen_center <= dist_max){
                     while (sen_center < dist_seguretat){
+                        printf("-------------------------------------------------Drift-----------------------------------");
                         turnOnItselfLeft(100);
+                        printf("-------------------------------------------------Drift-----------------------------------");
                         sen_center = redObsDistance(3, 0x1b);
                     }
                 }
-                else if(sen_right < dist_min){
+                else if(sen_right <= dist_min){
                     turnRight(150);
                 }
                 else if(sen_right > dist_max){
