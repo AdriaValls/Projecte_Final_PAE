@@ -63,7 +63,7 @@ void turnRight(unsigned int speed){
     }
 }
 void turnOnItselfLeft(unsigned int speed){
-    /** Per fer un gir més tancat li donem la mateixa dirrecció a les dues rodes per tal de que giri sobre l'eix del robot **/
+    /** Per fer un gir més tancat li donem direccións oposades a les dues rodes per tal de que giri sobre l'eix del robot **/
     if(speed < 1024){
         moveWheel(RIGHT_WHEEL, LEFT, speed);
         moveWheel(LEFT_WHEEL, RIGHT, speed);
@@ -78,7 +78,7 @@ void turnOnItselfRight(unsigned int speed){
 }
 
 void forward(unsigned int speed){
-    /** Li donem la mateixa speed a les dues rodes i direccións oposades ja que els motors estan posats de forma inversa un de l'altre **/
+    /** Li donem la mateixa speed a les dues rodes i la mateixa direcció (left=0) per que vagi cap endavant sense girar cap a cap costat **/
     if(speed < 1024){
         moveWheel(RIGHT_WHEEL, LEFT , speed);
         moveWheel(LEFT_WHEEL, LEFT, speed);

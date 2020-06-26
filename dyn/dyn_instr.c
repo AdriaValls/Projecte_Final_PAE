@@ -68,20 +68,21 @@ int dyn_read_byte(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *reg_read_val) 
  */
 int dyn_write(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *val, uint8_t len) {
 
-    uint8_t bParam[len+1];
-    struct RxReturn response;
+    uint8_t new_pack[len+1];
+    struct RxReturn ret_Rx; /** Creem un nou paquet de dades i una variable de retorn del Rx packet**/
 
-    uint8_t bLength = len+1;
-    uint8_t bInstruction = DYN_INSTR__WRITE;
-    bParam[0] = reg_addr;
-    //Escribimos desde la segunda posición del array, la dirección está en pos[0]
-    int i;
+    uint8_t new_len = len+1;
+    uint8_t new_ins = DYN_INSTR__WRITE;
+    new_pack[0] = reg_addr;
+
+    int i; /** El primer valor del nou packet és la adreça, per tant ara que li passem el paràmetres de la instrucció els
+               guardarem a partir de la posició 1**/
     for (i = 1; i < len + 1; i++){
-        bParam[i] = val[i-1];
+        new_pack[i] = val[i-1];
     }
 
-    response = RxTxPacket(module_id, bLength, bInstruction, bParam);
+    ret_Rx = RxTxPacket(module_id, new_len, new_ins, new_pack);
 
-    return (response.tx_err < 1) | response.time_out;
+    return (ret_Rx.tx_err < 1) | ret_Rx.time_out; /** Vigilem que no hi hagi cap error**/
 }
 
